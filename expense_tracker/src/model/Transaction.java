@@ -6,6 +6,8 @@ import java.util.Date;
 /**
  * Represents an immutable transaction in the expense tracker.
  * This class is made final to prevent inheritance and ensure immutability.
+ * No setter methods - prevents state changes
+ * All fields are primitive or immutable types
  */
 public final class Transaction {
     // All fields are private and final to ensure immutability
