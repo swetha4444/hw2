@@ -15,10 +15,13 @@ public class ExpenseTrackerModel {
 
     // Modified to take primitive types instead of Transaction object
     // This prevents external code from creating Transaction objects directly
-    public void addTransaction(double amount, String category) {
-        Transaction t = new Transaction(amount, category);
-        transactions.add(t);
-    }
+    public boolean addTransaction(double amount, String category) {
+      if (amount <= 0 || category == null || category.trim().isEmpty()) {
+          return false;
+      }
+      Transaction t = new Transaction(amount, category);
+      return transactions.add(t);
+  }
 
     // Removed removeTransaction method to maintain immutability
     // External code should not be able to modify the transactions list

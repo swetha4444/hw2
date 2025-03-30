@@ -1,13 +1,9 @@
 package controller;
 
-import view.ExpenseTrackerView;
-
 import java.util.List;
-
-
-
 import model.ExpenseTrackerModel;
 import model.Transaction;
+import view.ExpenseTrackerView;
 public class ExpenseTrackerController {
   
   private ExpenseTrackerModel model;
@@ -38,11 +34,12 @@ public class ExpenseTrackerController {
       return false;
     }
     
-    Transaction t = new Transaction(amount, category);
-    model.addTransaction(t);
-    view.getTableModel().addRow(new Object[]{t.getAmount(), t.getCategory(), t.getTimestamp()});
-    refresh();
-    return true;
+    boolean success = model.addTransaction(amount, category);
+    if (success) {
+      // view.getTableModel().addRow(new Object[]{t.getAmount(), t.getCategory(), t.getTimestamp()});
+      refresh();  // This will update the view through proper channel
+    }
+    return success;
   }
   
   // Other controller methods
