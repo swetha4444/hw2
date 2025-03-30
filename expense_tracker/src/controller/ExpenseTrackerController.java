@@ -3,6 +3,7 @@ package controller;
 import java.util.List;
 import model.ExpenseTrackerModel;
 import model.Transaction;
+import model.TransactionFilter;
 import view.ExpenseTrackerView;
 public class ExpenseTrackerController {
   
@@ -43,4 +44,16 @@ public class ExpenseTrackerController {
   }
   
   // Other controller methods
+
+  public void applyFilter(TransactionFilter filter) {
+    List<Transaction> allTransactions = model.getTransactions();
+    List<Transaction> filteredTransactions = filter.filter(allTransactions);
+    view.refreshTable(filteredTransactions);
+  }
+
+  public void resetFilter() {
+    view.resetFilterFields();  // Reset the filter input fields
+    refresh();                 // Show all transactions
+  }
+  
 }
