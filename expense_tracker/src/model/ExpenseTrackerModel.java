@@ -1,26 +1,36 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections; // Added for unmodifiableList
 import java.util.List;
 
 public class ExpenseTrackerModel {
+    // Changed to private for encapsulation
+    // Added final to prevent reference modification
+    private final List<Transaction> transactions;
 
-  public List<Transaction> transactions;
+    public ExpenseTrackerModel() {
+        transactions = new ArrayList<>(); 
+    }
 
-  public ExpenseTrackerModel() {
-    transactions = new ArrayList<>(); 
-  }
+    // Modified to take primitive types instead of Transaction object
+    // This prevents external code from creating Transaction objects directly
+    public void addTransaction(double amount, String category) {
+        Transaction t = new Transaction(amount, category);
+        transactions.add(t);
+    }
 
-  public void addTransaction(Transaction t) {
-    transactions.add(t);
-  }
+    // Removed removeTransaction method to maintain immutability
+    // External code should not be able to modify the transactions list
 
-  public void removeTransaction(Transaction t) {
-    transactions.remove(t);
-  }
-
-  public List<Transaction> getTransactions() {
-    return transactions;
-  }
-
+    /**
+     * Returns an unmodifiable view of the transactions list.
+     * Using Collections.unmodifiableList ensures:
+     * 1. External code cannot modify the list
+     * 2. Any attempt to modify the list will throw UnsupportedOperationException
+     * 3. Original list remains encapsulated and protected
+     */
+    public List<Transaction> getTransactions() {
+        return Collections.unmodifiableList(transactions);
+    }
 }
