@@ -145,5 +145,26 @@ public class TestExample {
         }
     }
 
-   
+    /**
+     * Requirement 4: Filter by Category
+     * - Steps: Add transactions with different categories, filter
+     * - Expected: Only matching categories returned
+     */
+    @Test
+    public void testFilterByCategory() {
+        // Steps: Add transactions with different categories
+        controller.addTransaction(50.00, "food");
+        controller.addTransaction(100.00, "travel");
+        controller.addTransaction(75.00, "food");
+
+        // Step: Apply category filter
+        CategoryFilter filter = new CategoryFilter("food");
+        List<Transaction> filtered = filter.filter(model.getTransactions());
+
+        // Expected Output: Only matching transactions returned
+        assertEquals(2, filtered.size());
+        for (Transaction t : filtered) {
+            assertEquals("food", t.getCategory());
+        }
+    }
 }
