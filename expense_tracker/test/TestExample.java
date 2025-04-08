@@ -177,4 +177,73 @@ public class TestExample {
             assertEquals("food", t.getCategory());
         }
     }
+
+    
+    // Additional Tests
+    /**
+     * Test multiple filters combined
+     * Verifies that filters can be chained/combined
+     */
+    @Test
+    public void testMultipleFilters() {
+        // Setup test data
+        controller.addTransaction(50.00, "food");
+        controller.addTransaction(50.00, "travel");
+        controller.addTransaction(100.00, "food");
+
+        // Apply both filters
+        AmountFilter amountFilter = new AmountFilter("50.00");
+        CategoryFilter categoryFilter = new CategoryFilter("food");
+        
+        List<Transaction> filtered = amountFilter.filter(model.getTransactions());
+        filtered = categoryFilter.filter(filtered);
+
+        // Verify results
+        assertEquals(1, filtered.size());
+        assertEquals(50.00, filtered.get(0).getAmount(), 0.01);
+        assertEquals("food", filtered.get(0).getCategory());
+    }
+
+    /**
+     * Test boundary conditions for amount validation
+     */
+    @Test
+    public void testAmountBoundaries() {
+        // Test boundary values
+        assertFalse(controller.addTransaction(-0.01, "food")); // Just below 0
+        assertTrue(controller.addTransaction(0.01, "food"));    // Just above 0
+        assertTrue(controller.addTransaction(999.99, "food"));  // Just below 1000
+        assertFalse(controller.addTransaction(1000.01, "food")); // Just above 1000
+    }
+
+    /**
+     * Test immutability of returned transaction list
+     */
+    @Test(expected = UnsupportedOperationException.class)
+    public void testTransactionListImmutability() {
+        // Add a transaction
+        controller.addTransaction(50.00, "food");
+        
+        // Try to modify the returned list
+        List<Transaction> transactions = model.getTransactions();
+        transactions.clear(); // Should throw UnsupportedOperationException
+    }
+
+    /**
+     * Test empty filter results
+     */
+    @Test
+    public void testEmptyFilterResults() {
+        // Add transactions
+        controller.addTransaction(50.00, "food");
+        controller.addTransaction(75.00, "travel");
+        
+        // Filter with non-matching criteria
+        AmountFilter filter = new AmountFilter("100.00");
+        List<Transaction> filtered = filter.filter(model.getTransactions());
+        
+        // Verify empty result handling
+        assertTrue(filtered.isEmpty());
+        assertEquals(0, filtered.size());
+    }
 }
