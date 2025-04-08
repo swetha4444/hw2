@@ -1,13 +1,15 @@
 // package test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;  // Add this import
 
 import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import controller.ExpenseTrackerController;
+import model.AmountFilter;
+import model.CategoryFilter;
 import model.ExpenseTrackerModel;
 import model.Transaction;
 import view.ExpenseTrackerView;
@@ -34,8 +36,6 @@ public class TestExample {
         }
         return totalCost;
     }
-    
-
 
     @Test
     public void testAddTransaction() {
@@ -75,6 +75,29 @@ public class TestExample {
         // Check the total cost after removing the transaction
         double totalCost = getTotalCost();
         assertEquals(0.00, totalCost, 0.01);
+    }
+
+    /**
+     * Requirement 1: Add Transaction
+     * - Steps: Add transaction with amount 50.00 and category "food"
+     * - Expected: Transaction added to table, Total Cost updated
+     */
+    @Test
+    public void testAddTransactionAndUpdateTotal() {
+        // Pre-condition: Empty initial state
+        assertEquals(0, model.getTransactions().size());
+        assertEquals(0.0, getTotalCost(), 0.01);
+
+        // Step: Add transaction with amount 50.00 and category "food"
+        double amount = 50.00;
+        String category = "food";
+        boolean result = controller.addTransaction(amount, category);
+
+        // Expected Output: Transaction added and total updated
+        assertTrue(result);  // Addition successful
+        assertEquals(1, model.getTransactions().size());  // One transaction added
+        assertEquals(amount, getTotalCost(), 0.01);  // Total cost updated
+        assertEquals(category, model.getTransactions().get(0).getCategory());
     }
     
 }
