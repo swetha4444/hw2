@@ -37,44 +37,54 @@ public class TestExample {
         return totalCost;
     }
 
+    /**
+     * Tests adding a transaction using the encapsulated method
+     * Uses primitive types instead of Transaction objects
+     */
     @Test
     public void testAddTransaction() {
         // Pre-condition: List of transactions is empty
         assertEquals(0, model.getTransactions().size());
     
-        // Perform the action: Add a transaction
-        assertTrue(controller.addTransaction(50.00, "food"));
+        // Perform the action: Add a transaction using primitive types
+        double amount = 50.00;
+        String category = "food";
+        assertTrue(controller.addTransaction(amount, category));
     
         // Post-condition: List of transactions contains one transaction
         assertEquals(1, model.getTransactions().size());
     
         // Check the contents of the list
-        assertEquals(50.00, getTotalCost(), 0.01);
+        assertEquals(amount, getTotalCost(), 0.01);
     }
 
 
+    /**
+     * Tests removing a transaction using the encapsulated method
+     * Uses primitive types instead of Transaction objects
+     */
     @Test
     public void testRemoveTransaction() {
         // Pre-condition: List of transactions is empty
         assertEquals(0, model.getTransactions().size());
     
-        // Perform the action: Add and remove a transaction
-        Transaction addedTransaction = new Transaction(50.00, "Groceries");
-        model.addTransaction(addedTransaction);
+        // Add a transaction using encapsulated method
+        double amount = 50.00;
+        String category = "food";
+        controller.addTransaction(amount, category);
     
-        // Pre-condition: List of transactions contains one transaction
+        // Verify transaction was added
         assertEquals(1, model.getTransactions().size());
     
-        // Perform the action: Remove the transaction
-        model.removeTransaction(addedTransaction);
+        // Remove the transaction using encapsulated method
+        assertTrue(model.removeTransaction(amount, category));
     
         // Post-condition: List of transactions is empty
         List<Transaction> transactions = model.getTransactions();
         assertEquals(0, transactions.size());
     
         // Check the total cost after removing the transaction
-        double totalCost = getTotalCost();
-        assertEquals(0.00, totalCost, 0.01);
+        assertEquals(0.00, getTotalCost(), 0.01);
     }
 
     /**

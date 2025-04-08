@@ -23,8 +23,17 @@ public class ExpenseTrackerModel {
       return transactions.add(t);
   }
 
-    // Removed removeTransaction method to maintain immutability
-    // External code should not be able to modify the transactions list
+     /**
+     * New encapsulated method for removing transactions
+     * @param amount The amount of the transaction to remove
+     * @param category The category of the transaction to remove
+     * @return true if a transaction was removed
+     */
+    public boolean removeTransaction(double amount, String category) {
+        return transactions.removeIf(t -> 
+            t.getAmount() == amount && 
+            t.getCategory().equals(category));
+    }
 
     /**
      * Returns an unmodifiable view of the transactions list.
