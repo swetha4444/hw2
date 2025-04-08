@@ -121,4 +121,29 @@ public class TestExample {
         assertEquals(initialSize, model.getTransactions().size());
         assertEquals(initialTotal, getTotalCost(), 0.01);
     }    
+
+     /**
+     * Requirement 3: Filter by Amount
+     * - Steps: Add transactions with different amounts, filter
+     * - Expected: Only matching amounts returned
+     */
+    @Test
+    public void testFilterByAmount() {
+        // Steps: Add transactions with different amounts
+        controller.addTransaction(50.00, "food");
+        controller.addTransaction(100.00, "travel");
+        controller.addTransaction(50.00, "bills");
+
+        // Step: Apply amount filter
+        AmountFilter filter = new AmountFilter("50.00");
+        List<Transaction> filtered = filter.filter(model.getTransactions());
+
+        // Expected Output: Only matching transactions returned
+        assertEquals(2, filtered.size());
+        for (Transaction t : filtered) {
+            assertEquals(50.00, t.getAmount(), 0.01);
+        }
+    }
+
+   
 }
