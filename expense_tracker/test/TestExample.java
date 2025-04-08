@@ -99,5 +99,26 @@ public class TestExample {
         assertEquals(amount, getTotalCost(), 0.01);  // Total cost updated
         assertEquals(category, model.getTransactions().get(0).getCategory());
     }
-    
+
+    /**
+     * Requirement 2: Invalid Input Handling
+     * - Steps: Try adding invalid transactions
+     * - Expected: Error messages shown, no state changes
+     */
+    @Test
+    public void testInvalidInputHandling() {
+        // Pre-condition: Record initial state
+        int initialSize = model.getTransactions().size();
+        double initialTotal = getTotalCost();
+
+        // Steps: Attempt invalid transactions
+        assertFalse(controller.addTransaction(-50.00, "food"));  // Invalid amount
+        assertFalse(controller.addTransaction(0.00, "food"));    // Invalid amount
+        assertFalse(controller.addTransaction(50.00, ""));       // Invalid category
+        assertFalse(controller.addTransaction(50.00, "invalid")); // Invalid category
+
+        // Expected Output: No changes to state
+        assertEquals(initialSize, model.getTransactions().size());
+        assertEquals(initialTotal, getTotalCost(), 0.01);
+    }    
 }
